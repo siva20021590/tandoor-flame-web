@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #faf7f2;
+  --foreground: #1f1c19;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-feature-settings: "ss01", "ss02";
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .container-prose {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-charcoal-200 bg-white px-6 py-3 text-sm font-semibold text-charcoal-800 transition hover:border-brand-400 hover:text-brand-700;
+  }
+  .field-label {
+    @apply mb-1 block text-sm font-medium text-charcoal-700;
+  }
+  .field-input {
+    @apply block w-full rounded-lg border border-charcoal-200 bg-white px-3 py-2 text-sm text-charcoal-800 shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-200;
+  }
+  .card {
+    @apply rounded-2xl border border-charcoal-100 bg-white/80 p-6 shadow-sm backdrop-blur;
+  }
+}

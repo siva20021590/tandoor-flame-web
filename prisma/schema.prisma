@@ -1,0 +1,102 @@
+// Prisma schema for Tandoor Flame restaurant
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String
+  role          String    @default("admin")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model MenuItem {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  priceInPaise Int
+  category    String
+  spiceLevel  Int      @default(1)
+  imageUrl    String?
+  isAvailable Boolean  @default(true)
+  isSignature Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems  OrderItem[]
+}
+
+model Reservation {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String
+  partySize  Int
+  date       DateTime
+  time       String
+  occasion   String?
+  notes      String?
+  status     String   @default("pending") // pending | confirmed | cancelled
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  deliveryAddress String?
+  orderType       String   // delivery | pickup
+  subtotalPaise   Int
+  taxPaise        Int
+  totalPaise      Int
+  status          String   @default("pending") // pending | paid | fulfilled | cancelled
+  paymentStatus   String   @default("unpaid")  // unpaid | paid | refunded | failed
+  razorpayOrderId String?  @unique
+  razorpayPaymentId String?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id             String   @id @default(cuid())
+  orderId        String
+  menuItemId     String
+  menuItemName   String
+  quantity       Int
+  unitPricePaise Int
+  totalPricePaise Int
+
+  order    Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model CateringInquiry {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String
+  eventType   String
+  eventDate   DateTime
+  guestCount  Int
+  venue       String?
+  budget      String?
+  message     String?
+  status      String   @default("new") // new | contacted | booked | closed
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
