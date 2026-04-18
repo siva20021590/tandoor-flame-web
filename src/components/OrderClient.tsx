@@ -179,7 +179,7 @@ export function OrderClient({
         }
         setStatus({
           kind: "success",
-          message: `Payment successful! Order ${body.orderId} is confirmed. We&apos;ll send updates to ${customer.customerEmail}.`,
+          message: `Payment successful! Order ${body.orderId} is confirmed. We'll send updates to ${customer.customerEmail}.`,
         });
         clear();
       },

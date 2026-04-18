@@ -35,7 +35,7 @@ export function CateringForm() {
     }
     const body = await res.json();
     setSuccess(
-      `Thank you, ${data.name}! We&apos;ll be in touch within one working day. Reference: ${body.id}`,
+      `Thank you, ${data.name}! We'll be in touch within one working day. Reference: ${body.id}`,
     );
     reset();
   };
