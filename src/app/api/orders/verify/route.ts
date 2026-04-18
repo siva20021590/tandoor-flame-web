@@ -28,6 +28,25 @@ export async function POST(req: Request) {
     );
   }
 
+  const existing = await prisma.order.findUnique({
+    where: { id: body.orderId },
+    select: { id: true, razorpayOrderId: true },
+  });
+
+  if (!existing) {
+    return NextResponse.json({ error: "Order not found" }, { status: 404 });
+  }
+
+  if (
+    !existing.razorpayOrderId ||
+    existing.razorpayOrderId !== body.razorpayOrderId
+  ) {
+    return NextResponse.json(
+      { error: "Order/payment mismatch" },
+      { status: 400 },
+    );
+  }
+
   const expected = crypto
     .createHmac("sha256", keySecret)
     .update(`${body.razorpayOrderId}|${body.razorpayPaymentId}`)
@@ -42,7 +61,7 @@ export async function POST(req: Request) {
   }
 
   const order = await prisma.order.update({
-    where: { id: body.orderId },
+    where: { id: body.orderId, razorpayOrderId: body.razorpayOrderId },
     data: {
       paymentStatus: "paid",
       status: "paid",
